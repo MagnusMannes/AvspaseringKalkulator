@@ -1,0 +1,209 @@
+:root {
+  color-scheme: light dark;
+  --background: #f5f6fa;
+  --card-background: #ffffffcc;
+  --text: #1f2933;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --border: #d6d9e0;
+  --error: #c81e1e;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(160deg, #cce0ff 0%, #f5f6fa 45%, #ffffff 100%);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+}
+
+.app {
+  width: min(960px, 100%);
+  margin: 0 auto;
+  padding: 3rem 1.5rem 2rem;
+  flex: 1;
+}
+
+.app__header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.app__header h1 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  margin-bottom: 0.5rem;
+}
+
+.app__header p {
+  font-size: 1.05rem;
+  margin: 0 auto;
+  max-width: 48rem;
+  line-height: 1.6;
+}
+
+.card {
+  background: var(--card-background);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.75rem;
+  box-shadow: 0 18px 36px -24px rgba(37, 99, 235, 0.4);
+}
+
+form.card {
+  margin-bottom: 2rem;
+}
+
+fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+legend {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.form-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 720px) {
+  .form-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: end;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+label {
+  font-weight: 600;
+}
+
+input,
+select {
+  font: inherit;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--accent) 50%),
+    linear-gradient(135deg, var(--accent) 50%, transparent 50%);
+  background-position: calc(100% - 1.2rem) calc(1.2rem + 2px),
+    calc(100% - 0.9rem) calc(1.2rem + 2px);
+  background-size: 12px 12px;
+  background-repeat: no-repeat;
+}
+
+.button {
+  font: inherit;
+  font-weight: 600;
+  padding: 0.9rem 1.6rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.button:hover,
+.button:focus-visible {
+  background: var(--accent-hover);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.form__actions {
+  margin-top: 1.5rem;
+}
+
+.message {
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+.message--error {
+  color: var(--error);
+  min-height: 1.25rem;
+}
+
+.result h2 {
+  margin-top: 0;
+}
+
+.result__fraction {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.result__table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.result__table th,
+.result__table td {
+  padding: 0.9rem 1rem;
+  text-align: left;
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+.result__table thead {
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--accent-hover);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.85rem;
+}
+
+.result__table tbody tr + tr td {
+  border-top: 1px solid var(--border);
+}
+
+.app__footer {
+  text-align: center;
+  padding: 1.5rem;
+  color: rgba(31, 41, 51, 0.65);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+  body {
+    background: linear-gradient(180deg, #d6e4ff 0%, #ffffff 60%);
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+}
