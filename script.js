@@ -52,7 +52,9 @@ form.addEventListener("submit", (event) => {
   }
 
   const durationText = formatDuration(avspaseringMinutes);
-  const completion = new Date(arrival.getTime() + avspaseringMinutes * 60000);
+  const completion = new Date(
+    departure.getTime() + avspaseringMinutes * 60000
+  );
   const fractionLabel =
     portionSelect.options[portionSelect.selectedIndex].textContent;
 
