@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Avspaseringskalkulator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="app__header">
+        <h1>Avspaseringskalkulator</h1>
+        <p>
+          Velg når du ankom og dro fra jobb, samt hvor stor del av perioden du
+          ønsker å ta ut i avspasering. Kalkulatoren viser hvor lenge du må
+          avspasere og når du er ferdig.
+        </p>
+      </header>
+
+      <form id="avspasering-form" class="card" autocomplete="off">
+        <fieldset class="form-grid">
+          <legend>Velg tidspunkt</legend>
+          <div class="field">
+            <label for="arrival">Ankomst</label>
+            <input
+              id="arrival"
+              name="arrival"
+              type="datetime-local"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="departure">Avgang</label>
+            <input
+              id="departure"
+              name="departure"
+              type="datetime-local"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="portion">Avspaseringsandel</label>
+            <select id="portion" name="portion">
+              <option value="0.3333333333" selected>1/3 avspasering</option>
+              <option value="0.5">1/2 avspasering</option>
+              <option value="1">1/1 avspasering</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <div class="form__actions">
+          <button type="submit" class="button">Kalkuler</button>
+        </div>
+
+        <p id="error-message" class="message message--error" role="alert"></p>
+      </form>
+
+      <section id="result" class="card result" aria-live="polite" hidden>
+        <h2>Resultat</h2>
+        <p class="result__info">
+          Lagrede perioder vises nedenfor og beholdes i nettleseren din til du
+          fjerner dem.
+        </p>
+        <table class="result__table">
+          <thead>
+            <tr>
+              <th scope="col" class="result__column--actions">
+                <span class="visually-hidden">Fjern</span>
+              </th>
+              <th scope="col">Varighet avspasering</th>
+              <th scope="col">Ferdig avspasert</th>
+              <th scope="col">Beskrivelse</th>
+            </tr>
+          </thead>
+          <tbody id="result-rows"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <footer class="app__footer">
+      <p>Laget for enkel planlegging av avspasering.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
