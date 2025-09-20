@@ -65,15 +65,17 @@
             <tr>
               <th scope="col">Varighet avspasering</th>
               <th scope="col">Ferdig avspasert</th>
+              <th scope="col">Beskrivelse</th>
+              <th scope="col">
+                <span class="visually-hidden">Fjern rad</span>
+              </th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td id="result-duration"></td>
-              <td id="result-end-time"></td>
-            </tr>
-          </tbody>
+          <tbody id="result-rows"></tbody>
         </table>
+        <p id="result-empty" class="result__empty">
+          Ingen lagrede avspaseringer ennå.
+        </p>
       </section>
     </main>
 
