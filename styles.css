@@ -39,7 +39,8 @@ body {
 .app {
   width: min(960px, 100%);
   margin: 0 auto;
-  padding: 3rem 1.5rem 2rem;
+  padding: clamp(2rem, 5vw, 3.5rem) clamp(1.25rem, 4vw, 2.75rem)
+    clamp(2rem, 5vw, 3rem);
   flex: 1;
 }
 
@@ -65,7 +66,7 @@ body {
   backdrop-filter: blur(6px);
   border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 1.75rem;
+  padding: clamp(1.5rem, 3.5vw, 2.1rem);
   box-shadow: 0 18px 36px -24px rgba(37, 99, 235, 0.4);
 }
 
@@ -268,12 +269,96 @@ select {
   font-size: 0.9rem;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 760px) {
   body {
-    background: linear-gradient(180deg, #d6e4ff 0%, #ffffff 60%);
+    background: linear-gradient(185deg, #d6e4ff 0%, #ffffff 65%);
+  }
+
+  .app {
+    padding: clamp(1.5rem, 6vw, 2.5rem) clamp(1rem, 6vw, 1.5rem) 2.5rem;
+  }
+
+  .app__header {
+    text-align: left;
+    margin-bottom: 2rem;
+  }
+
+  .app__header p {
+    font-size: 0.98rem;
+    margin: 0;
   }
 
   .card {
-    padding: 1.5rem;
+    padding: clamp(1.35rem, 5vw, 1.75rem);
+  }
+
+  .form__actions {
+    margin-top: 1.25rem;
+  }
+
+  .form__actions .button {
+    width: 100%;
+  }
+
+  .result__table {
+    border-radius: 16px;
+  }
+
+  .result__table thead {
+    display: none;
+  }
+
+  .result__table,
+  .result__table tbody,
+  .result__table tr,
+  .result__table td {
+    display: block;
+    width: 100%;
+  }
+
+  .result__table tr {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 16px 34px -26px rgba(37, 99, 235, 0.55);
+    padding: 0.35rem 0.35rem 0.5rem;
+  }
+
+  .result__table tbody tr + tr {
+    margin-top: 1rem;
+  }
+
+  .result__table td {
+    background: transparent;
+    border: none;
+    border-top: none;
+    display: grid;
+    grid-template-columns: minmax(7.5rem, 38%) minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .result__table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--accent-hover);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.68rem;
+  }
+
+  .result__table td:last-child {
+    text-align: left;
+    width: auto;
+  }
+
+  .result__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .result__remove-button {
+    margin-left: auto;
   }
 }
