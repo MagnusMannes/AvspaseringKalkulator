@@ -96,11 +96,14 @@ function renderEntries() {
 
     const durationCell = document.createElement("td");
     durationCell.textContent = entry.duration;
+    durationCell.dataset.label = "Varighet avspasering";
 
     const completionCell = document.createElement("td");
     completionCell.textContent = entry.completion;
+    completionCell.dataset.label = "Ferdig avspasert";
 
     const descriptionCell = document.createElement("td");
+    descriptionCell.dataset.label = "Beskrivelse";
     const descriptionInput = document.createElement("input");
     descriptionInput.type = "text";
     descriptionInput.placeholder = "Beskriv avspaseringen";
@@ -114,6 +117,7 @@ function renderEntries() {
 
     const actionsCell = document.createElement("td");
     actionsCell.classList.add("result__actions");
+    actionsCell.dataset.label = "Fjern";
     const removeButton = document.createElement("button");
     removeButton.type = "button";
     removeButton.classList.add("result__remove-button");
