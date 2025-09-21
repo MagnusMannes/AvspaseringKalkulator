@@ -60,6 +60,8 @@ form.addEventListener("submit", (event) => {
 
   const newEntry = {
     id: createId(),
+    periodStart: arrival.toISOString(),
+    periodEnd: departure.toISOString(),
     duration: durationText,
     completion: dateTimeFormatter.format(completion),
     fractionLabel,
@@ -93,6 +95,21 @@ function renderEntries() {
   entries.forEach((entry) => {
     const row = document.createElement("tr");
     row.dataset.id = entry.id;
+
+    const periodCell = document.createElement("td");
+    periodCell.dataset.label = "Start og slutt";
+    const periodStartText = formatStoredDate(entry.periodStart);
+    const periodEndText = formatStoredDate(entry.periodEnd);
+
+    if (periodStartText && periodEndText) {
+      periodCell.textContent = `${periodStartText} – ${periodEndText}`;
+    } else if (periodStartText) {
+      periodCell.textContent = periodStartText;
+    } else if (periodEndText) {
+      periodCell.textContent = periodEndText;
+    } else {
+      periodCell.textContent = "Periode ikke lagret";
+    }
 
     const durationCell = document.createElement("td");
     durationCell.textContent = entry.duration;
@@ -128,7 +145,7 @@ function renderEntries() {
     });
     actionsCell.append(removeButton);
 
-    row.append(durationCell, completionCell, descriptionCell, actionsCell);
+    row.append(periodCell, durationCell, completionCell, descriptionCell, actionsCell);
     resultRows.append(row);
   });
 
@@ -137,6 +154,20 @@ function renderEntries() {
   } else {
     selectedFraction.textContent = "";
   }
+}
+
+function formatStoredDate(value) {
+  if (typeof value !== "string" || !value) {
+    return null;
+  }
+
+  const parsed = new Date(value);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
+
+  return dateTimeFormatter.format(parsed);
 }
 
 function removeEntry(id) {
@@ -178,6 +209,10 @@ function loadEntries() {
     return parsed
       .map((entry) => ({
         id: typeof entry.id === "string" ? entry.id : createId(),
+        periodStart:
+          typeof entry.periodStart === "string" ? entry.periodStart : "",
+        periodEnd:
+          typeof entry.periodEnd === "string" ? entry.periodEnd : "",
         duration: typeof entry.duration === "string" ? entry.duration : "",
         completion:
           typeof entry.completion === "string" ? entry.completion : "",
