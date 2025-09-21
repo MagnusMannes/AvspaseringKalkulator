@@ -127,6 +127,27 @@ function renderEntries() {
     });
     descriptionCell.append(descriptionInput);
 
+    const screenshotCell = document.createElement("td");
+    screenshotCell.classList.add("result__screenshot");
+    screenshotCell.dataset.label = "Skjermbilde";
+    const screenshotButton = document.createElement("button");
+    screenshotButton.type = "button";
+    screenshotButton.classList.add("result__screenshot-button");
+    screenshotButton.innerHTML =
+      '<span aria-hidden="true">📸</span><span class="visually-hidden">Lagre skjermbilde</span>';
+    screenshotButton.addEventListener("click", async () => {
+      screenshotButton.disabled = true;
+      screenshotButton.classList.add("is-loading");
+
+      try {
+        await captureEntryScreenshot(entry);
+      } finally {
+        screenshotButton.disabled = false;
+        screenshotButton.classList.remove("is-loading");
+      }
+    });
+    screenshotCell.append(screenshotButton);
+
     const actionsCell = document.createElement("td");
     actionsCell.classList.add("result__actions");
     actionsCell.dataset.label = "Fjern";
@@ -146,6 +167,7 @@ function renderEntries() {
       durationCell,
       completionCell,
       descriptionCell,
+      screenshotCell,
       actionsCell,
     );
     resultRows.append(row);
@@ -255,4 +277,126 @@ function formatDuration(totalMinutes) {
   }
 
   return parts.join(" og ");
+}
+
+async function captureEntryScreenshot(entry) {
+  if (typeof html2canvas !== "function") {
+    window.alert(
+      "Kunne ikke ta skjermbilde fordi støttebiblioteket ikke er tilgjengelig."
+    );
+    return;
+  }
+
+  const card = createScreenshotCard(entry);
+  document.body.append(card);
+
+  try {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    const canvas = await html2canvas(card, {
+      backgroundColor: null,
+      scale: Math.min(3, window.devicePixelRatio || 2),
+    });
+
+    const dataUrl = canvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = createScreenshotFilename(entry);
+    link.click();
+  } catch (error) {
+    console.error("Kunne ikke generere skjermbilde", error);
+    window.alert("Noe gikk galt under generering av skjermbilde.");
+  } finally {
+    card.remove();
+  }
+}
+
+function createScreenshotCard(entry) {
+  const card = document.createElement("article");
+  card.className = "screenshot-card";
+
+  const heading = document.createElement("h3");
+  heading.className = "screenshot-card__title";
+  heading.textContent = "Avspaseringsdetaljer";
+
+  const fraction = document.createElement("p");
+  fraction.className = "screenshot-card__fraction";
+  fraction.textContent = entry.fractionLabel
+    ? `Andel: ${entry.fractionLabel}`
+    : "Andel ikke angitt";
+
+  const details = document.createElement("dl");
+  details.className = "screenshot-card__list";
+
+  details.append(
+    createScreenshotItem(
+      "Ankomst",
+      formatStoredDate(entry.periodStart) || "Tidspunkt ikke lagret"
+    ),
+    createScreenshotItem(
+      "Avgang",
+      formatStoredDate(entry.periodEnd) || "Tidspunkt ikke lagret"
+    ),
+    createScreenshotItem("Varighet", entry.duration || "Ukjent"),
+    createScreenshotItem(
+      "Ferdig avspasert",
+      entry.completion || "Tidspunkt ikke lagret"
+    )
+  );
+
+  const description = document.createElement("p");
+  description.className = "screenshot-card__description";
+  description.textContent = entry.description
+    ? entry.description
+    : "Ingen beskrivelse lagt til.";
+
+  const timestamp = document.createElement("p");
+  timestamp.className = "screenshot-card__timestamp";
+  const formatter = new Intl.DateTimeFormat("no-NO", {
+    dateStyle: "long",
+    timeStyle: "short",
+  });
+  timestamp.textContent = `Generert ${formatter.format(new Date())}`;
+
+  card.append(heading, fraction, details, description, timestamp);
+
+  return card;
+}
+
+function createScreenshotItem(label, value) {
+  const item = document.createElement("div");
+  item.className = "screenshot-card__item";
+
+  const term = document.createElement("dt");
+  term.textContent = label;
+
+  const detail = document.createElement("dd");
+  detail.textContent = value;
+
+  item.append(term, detail);
+
+  return item;
+}
+
+function createScreenshotFilename(entry) {
+  const fallbackDate = new Date().toISOString().split("T")[0];
+  const storedDate =
+    typeof entry.periodStart === "string" && entry.periodStart
+      ? entry.periodStart.split("T")[0]
+      : fallbackDate;
+
+  const slugSource = entry.description && entry.description.trim().length > 0
+    ? entry.description
+    : entry.fractionLabel || "avspasering";
+
+  const slug = slugSource
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  const suffix = slug ? `-${slug}` : "";
+
+  return `avspasering-${storedDate}${suffix}.png`;
 }
