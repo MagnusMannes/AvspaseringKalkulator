@@ -96,20 +96,15 @@ function renderEntries() {
     const row = document.createElement("tr");
     row.dataset.id = entry.id;
 
-    const periodCell = document.createElement("td");
-    periodCell.dataset.label = "Start og slutt";
-    const periodStartText = formatStoredDate(entry.periodStart);
-    const periodEndText = formatStoredDate(entry.periodEnd);
+    const arrivalCell = document.createElement("td");
+    arrivalCell.dataset.label = "Ankomst";
+    const arrivalText = formatStoredDate(entry.periodStart);
+    arrivalCell.textContent = arrivalText || "Tidspunkt ikke lagret";
 
-    if (periodStartText && periodEndText) {
-      periodCell.textContent = `${periodStartText} – ${periodEndText}`;
-    } else if (periodStartText) {
-      periodCell.textContent = periodStartText;
-    } else if (periodEndText) {
-      periodCell.textContent = periodEndText;
-    } else {
-      periodCell.textContent = "Periode ikke lagret";
-    }
+    const departureCell = document.createElement("td");
+    departureCell.dataset.label = "Avgang";
+    const departureText = formatStoredDate(entry.periodEnd);
+    departureCell.textContent = departureText || "Tidspunkt ikke lagret";
 
     const durationCell = document.createElement("td");
     durationCell.textContent = entry.duration;
@@ -145,7 +140,14 @@ function renderEntries() {
     });
     actionsCell.append(removeButton);
 
-    row.append(periodCell, durationCell, completionCell, descriptionCell, actionsCell);
+    row.append(
+      arrivalCell,
+      departureCell,
+      durationCell,
+      completionCell,
+      descriptionCell,
+      actionsCell,
+    );
     resultRows.append(row);
   });
 
